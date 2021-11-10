@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema(
     askedFriends: { type: Array },
     photoURL: { type: String },
     bottles: { type: Number },
+    hearts: { type: Number },
   },
   {
     collection: "users",

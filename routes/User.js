@@ -75,21 +75,18 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/myinfo", async (req, res) => {
-  console.log(req.query);
   const { token } = await req.query;
   try {
     const user = jwt.verify(token, JWT_SECRET);
-    const userObj = await UserModel.findOne({ _id: user.id }).lean();
-    res.send({ status: "success", user: userObj });
+    const userInfo = await UserModel.findOne({ _id: user.id }).lean();
+    res.send({ status: "success", user: userInfo });
   } catch (error) {
     res.send({ status: "error", error });
   }
 });
 
 router.get("/userinfo", async (req, res) => {
-  const {
-    body: { id },
-  } = req;
+  const { id } = req.query;
 
   try {
     const profile = await UserModel.find({ _id: id }).lean();
@@ -99,7 +96,7 @@ router.get("/userinfo", async (req, res) => {
   }
 });
 
-router.get("/kakaoLogin", async (req, res) => {
+router.post("/kakaoLogin", async (req, res) => {
   const {
     body: { id, nickname, profile_image },
   } = req;
@@ -111,7 +108,6 @@ router.get("/kakaoLogin", async (req, res) => {
       password: id,
       nickname,
       socialLogin: "kakao",
-      usertype: "notyet",
       photoURL: profile_image,
     });
     const token = jwt.sign(

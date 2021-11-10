@@ -12,23 +12,26 @@ dotenv.config();
 
 const app = express();
 const server = http.Server(app);
-const io = new Server(server);
-const peerServer = ExpressPeerServer(server, { debug: true });
-
-app.use("/peerjs", peerServer);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    method: ["GET", "POST"],
+  },
+});
 
 app.use(bodyParser.json({ extended: true, limit: "2mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 io.on("connection", (socket) => {
-  console.log(socket);
-  socket.on("join-room", (roomId, userId) => {
+  socket.on("join-room", (roomId, userInfo) => {
     socket.join(roomId);
-    socket.to(roomId).emit("user-connected", userId);
-
+    io.to(roomId).emit("user-connected", userInfo);
     socket.on("message", (message) => {
       io.to(roomId).emit("createMessage", message);
+    });
+    socket.on("disconnect", () => {
+      io.to(roomId).emit("user-disconnected", userInfo);
     });
   });
 });
