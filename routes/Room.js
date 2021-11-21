@@ -76,7 +76,21 @@ router.post("/getout", async (req, _) => {
       {
         $pull: { participants: userId },
       }
-    );
+    ).then(() => CheckIsValid(roomId));
+  }
+});
+
+//get rooms
+router.get("/all", async (req, res) => {
+  try {
+    const skip =
+      req.query.skip && /^\d+$/.test(req.query.skip)
+        ? Number(req.query.skip)
+        : 0;
+    const rooms = await RoomModel.find({}, undefined, { skip, limit: 9 });
+    res.send({ status: "success", data: rooms });
+  } catch (e) {
+    console.log(e);
   }
 });
 

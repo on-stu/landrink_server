@@ -28,13 +28,12 @@ io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userInfo) => {
     socket.userInfo = userInfo;
     socket.join(roomId);
-    console.log("hello");
     io.to(roomId).emit("user-connected", userInfo);
     socket.on("message", (message) => {
       io.to(roomId).emit("createMessage", message);
     });
     socket.on("disconnecting", () => {
-      PullUser(roomId, socket.userInfo.dbId);
+      // PullUser(roomId, socket.userInfo.dbId);
       io.to(roomId).emit("user-disconnected", userInfo);
     });
   });

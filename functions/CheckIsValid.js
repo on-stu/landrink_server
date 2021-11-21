@@ -2,7 +2,6 @@ import RoomModel from "../models/RoomModel.js";
 
 export const CheckIsValid = async (roomId) => {
   const roomState = await RoomModel.findOne({ _id: roomId });
-  console.log(roomId, roomState);
   if (
     (roomState && !roomState.participants) ||
     roomState.participants.length == 0
