@@ -51,7 +51,7 @@ app.use("/auth", User);
 app.use("/room", Room);
 
 const CONNECTION_URI = process.env.CONNECTION_URI;
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8001;
 
 mongoose
   .connect(CONNECTION_URI, {
