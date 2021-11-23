@@ -7,8 +7,6 @@ import http from "http";
 import { Server } from "socket.io";
 import User from "./routes/User.js";
 import Room from "./routes/Room.js";
-import { CheckIsValid, PullUser } from "./functions/CheckIsValid.js";
-
 dotenv.config();
 
 const app = express();
