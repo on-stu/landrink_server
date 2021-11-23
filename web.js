@@ -7,6 +7,10 @@ import http from "http";
 import { Server } from "socket.io";
 import User from "./routes/User.js";
 import Room from "./routes/Room.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config();
 
 const app = express();
@@ -16,6 +20,12 @@ const io = new Server(server, {
     origin: "*",
     method: ["GET", "POST"],
   },
+});
+
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
+app.get("/", (req, res) => {
+  res.render("index");
 });
 
 app.use(bodyParser.json({ extended: true, limit: "2mb" }));
