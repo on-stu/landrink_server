@@ -181,4 +181,24 @@ router.put("/password", async (req, res) => {
   }
 });
 
+router.post("/ask", async (req, res) => {
+  const {
+    body: { fromId, toId },
+  } = req;
+  try {
+    const data1 = await UserModel.updateOne(
+      { _id: fromId },
+      { $addToSet: { askingFriends: [toId] } }
+    );
+    const data2 = await UserModel.updateOne(
+      { _id: toId },
+      { $addToSet: { askedFriends: [fromId] } }
+    );
+    console.log(data1, data2);
+    res.send({ status: "success", data1, data2 });
+  } catch (error) {
+    res.send({ status: "error", error });
+  }
+});
+
 export default router;
