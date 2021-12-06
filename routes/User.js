@@ -194,7 +194,25 @@ router.post("/ask", async (req, res) => {
       { _id: toId },
       { $addToSet: { askedFriends: [fromId] } }
     );
-    console.log(data1, data2);
+    res.send({ status: "success", data1, data2 });
+  } catch (error) {
+    res.send({ status: "error", error });
+  }
+});
+
+router.post("/confirm", async (req, res) => {
+  const {
+    body: { fromId, toId },
+  } = req;
+  try {
+    const data1 = await UserModel.updateMany(
+      { _id: toId },
+      { $pull: { askingFriends: fromId }, $addToSet: { friends: [fromId] } }
+    );
+    const data2 = await UserModel.updateOne(
+      { _id: fromId },
+      { $pull: { askedFriends: toId }, $addToSet: { friends: [toId] } }
+    );
     res.send({ status: "success", data1, data2 });
   } catch (error) {
     res.send({ status: "error", error });
