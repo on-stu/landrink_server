@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema(
     photoURL: { type: String },
     bottles: { type: Number },
     hearts: { type: Number },
+    online: { type: Boolean },
   },
   {
     collection: "users",
